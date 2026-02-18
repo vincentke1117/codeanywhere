@@ -10,6 +10,7 @@ import { SkillListItem } from "./SkillListItem";
 import { SkillEditor } from "./SkillEditor";
 import { CreateSkillDialog } from "./CreateSkillDialog";
 import type { SkillItem } from "./SkillListItem";
+import { authFetch } from "@/lib/api-client";
 
 export function SkillsManager() {
   const [skills, setSkills] = useState<SkillItem[]>([]);
@@ -20,7 +21,7 @@ export function SkillsManager() {
 
   const fetchSkills = useCallback(async () => {
     try {
-      const res = await fetch("/api/skills");
+      const res = await authFetch("/api/skills");
       if (res.ok) {
         const data = await res.json();
         setSkills(data.skills || []);
@@ -38,7 +39,7 @@ export function SkillsManager() {
 
   const handleCreate = useCallback(
     async (name: string, scope: "global" | "project", content: string) => {
-      const res = await fetch("/api/skills", {
+      const res = await authFetch("/api/skills", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, content, scope }),
@@ -64,7 +65,7 @@ export function SkillsManager() {
 
   const handleSave = useCallback(
     async (skill: SkillItem, content: string) => {
-      const res = await fetch(buildSkillUrl(skill), {
+      const res = await authFetch(buildSkillUrl(skill), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content }),
@@ -92,7 +93,7 @@ export function SkillsManager() {
 
   const handleDelete = useCallback(
     async (skill: SkillItem) => {
-      const res = await fetch(buildSkillUrl(skill), { method: "DELETE" });
+      const res = await authFetch(buildSkillUrl(skill), { method: "DELETE" });
       if (res.ok) {
         setSkills((prev) =>
           prev.filter(

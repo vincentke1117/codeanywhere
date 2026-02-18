@@ -29,6 +29,7 @@ import { ConnectionStatus } from "./ConnectionStatus";
 import { ImportSessionDialog } from "./ImportSessionDialog";
 import { FolderPicker } from "@/components/chat/FolderPicker";
 import type { ChatSession } from "@/types";
+import { authFetch } from "@/lib/api-client";
 
 interface ChatListPanelProps {
   open: boolean;
@@ -143,7 +144,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
     // Validate the saved directory still exists
     setCreatingChat(true);
     try {
-      const checkRes = await fetch(
+      const checkRes = await authFetch(
         `/api/files/browse?dir=${encodeURIComponent(lastDir)}`
       );
       if (!checkRes.ok) {
@@ -153,7 +154,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
         return;
       }
 
-      const res = await fetch("/api/chat/sessions", {
+      const res = await authFetch("/api/chat/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ working_directory: lastDir }),
@@ -186,7 +187,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
 
   const fetchSessions = useCallback(async () => {
     try {
-      const res = await fetch("/api/chat/sessions");
+      const res = await authFetch("/api/chat/sessions");
       if (res.ok) {
         const data = await res.json();
         setSessions(data.sessions || []);
@@ -225,7 +226,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
     if (!confirm("Delete this conversation?")) return;
     setDeletingSession(sessionId);
     try {
-      const res = await fetch(`/api/chat/sessions/${sessionId}`, {
+      const res = await authFetch(`/api/chat/sessions/${sessionId}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -247,7 +248,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
   ) => {
     e.stopPropagation();
     try {
-      const res = await fetch("/api/chat/sessions", {
+      const res = await authFetch("/api/chat/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ working_directory: workingDirectory }),
@@ -264,7 +265,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
 
   const handleFolderSelect = async (path: string) => {
     try {
-      const res = await fetch("/api/chat/sessions", {
+      const res = await authFetch("/api/chat/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ working_directory: path }),

@@ -6,6 +6,7 @@ import type { Message, SSEEvent, SessionResponse, TokenUsage, PermissionRequestE
 import { MessageList } from '@/components/chat/MessageList';
 import { MessageInput } from '@/components/chat/MessageInput';
 import { usePanel } from '@/hooks/usePanel';
+import { authFetch } from "@/lib/api-client";
 
 interface ToolUseInfo {
   id: string;
@@ -59,7 +60,7 @@ export default function NewChatPage() {
     setPendingApprovalSessionId('');
 
     try {
-      await fetch('/api/chat/permission', {
+      await authFetch('/api/chat/permission', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -111,7 +112,7 @@ export default function NewChatPage() {
           working_directory: workingDir.trim(),
         };
 
-        const createRes = await fetch('/api/chat/sessions', {
+        const createRes = await authFetch('/api/chat/sessions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(createBody),
@@ -140,7 +141,7 @@ export default function NewChatPage() {
         setMessages([userMessage]);
 
         // Send the message via streaming API
-        const response = await fetch('/api/chat', {
+        const response = await authFetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ session_id: session.id, content, mode, model: currentModel }),

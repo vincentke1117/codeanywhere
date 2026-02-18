@@ -6,6 +6,7 @@ import { MessageList } from './MessageList';
 import { MessageInput } from './MessageInput';
 import { usePanel } from '@/hooks/usePanel';
 import { consumeSSEStream } from '@/hooks/useSSEStream';
+import { authFetch } from "@/lib/api-client";
 
 interface ToolUseInfo {
   id: string;
@@ -48,7 +49,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
     setMode(newMode);
     // Persist mode to database and notify chat list
     if (sessionId) {
-      fetch(`/api/chat/sessions/${sessionId}`, {
+      authFetch(`/api/chat/sessions/${sessionId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode: newMode }),
@@ -110,7 +111,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
       const earliest = messages[0];
       const earliestRowId = (earliest as Message & { _rowid?: number })._rowid;
       if (!earliestRowId) return;
-      const res = await fetch(`/api/chat/sessions/${sessionId}/messages?limit=100&before=${earliestRowId}`);
+      const res = await authFetch(`/api/chat/sessions/${sessionId}/messages?limit=100&before=${earliestRowId}`);
       if (!res.ok) return;
       const data: MessagesResponse = await res.json();
       setHasMore(data.hasMore ?? false);
@@ -147,7 +148,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
     setPendingApprovalSessionId('');
 
     try {
-      await fetch('/api/chat/permission', {
+      await authFetch('/api/chat/permission', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -198,7 +199,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
       let accumulated = '';
 
       try {
-        const response = await fetch('/api/chat', {
+        const response = await authFetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -387,7 +388,7 @@ export function ChatView({ sessionId, initialMessages = [], initialHasMore = fal
         setMessages([]);
         // Also clear database messages and reset SDK session
         if (sessionId) {
-          fetch(`/api/chat/sessions/${sessionId}`, {
+          authFetch(`/api/chat/sessions/${sessionId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ clear_messages: true }),

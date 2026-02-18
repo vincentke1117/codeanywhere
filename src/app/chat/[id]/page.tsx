@@ -8,6 +8,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { Loading02Icon, PencilEdit01Icon } from "@hugeicons/core-free-icons";
 import { Input } from '@/components/ui/input';
 import { usePanel } from '@/hooks/usePanel';
+import { authFetch } from "@/lib/api-client";
 
 interface ChatSessionPageProps {
   params: Promise<{ id: string }>;
@@ -40,7 +41,7 @@ export default function ChatSessionPage({ params }: ChatSessionPageProps) {
       return;
     }
     try {
-      const res = await fetch(`/api/chat/sessions/${id}`, {
+      const res = await authFetch(`/api/chat/sessions/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title: trimmed }),
@@ -75,7 +76,7 @@ export default function ChatSessionPage({ params }: ChatSessionPageProps) {
   useEffect(() => {
     async function loadSession() {
       try {
-        const res = await fetch(`/api/chat/sessions/${id}`);
+        const res = await authFetch(`/api/chat/sessions/${id}`);
         if (res.ok) {
           const data: { session: ChatSession } = await res.json();
           if (data.session.working_directory) {
@@ -110,7 +111,7 @@ export default function ChatSessionPage({ params }: ChatSessionPageProps) {
 
     async function loadMessages() {
       try {
-        const res = await fetch(`/api/chat/sessions/${id}/messages?limit=100`);
+        const res = await authFetch(`/api/chat/sessions/${id}/messages?limit=100`);
         if (cancelled) return;
         if (!res.ok) {
           if (res.status === 404) {

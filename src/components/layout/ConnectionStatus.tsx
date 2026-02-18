@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { InstallWizard } from "@/components/layout/InstallWizard";
+import { authFetch } from "@/lib/api-client";
 
 interface ClaudeStatus {
   connected: boolean;
@@ -49,7 +50,7 @@ export function ConnectionStatus() {
 
   const checkStatus = useCallback(async () => {
     try {
-      const res = await fetch("/api/claude-status");
+      const res = await authFetch("/api/claude-status");
       if (res.ok) {
         const data: ClaudeStatus = await res.json();
         if (lastConnectedRef.current === data.connected) {

@@ -9,6 +9,7 @@ import { McpServerList } from "@/components/plugins/McpServerList";
 import { McpServerEditor } from "@/components/plugins/McpServerEditor";
 import { ConfigEditor } from "@/components/plugins/ConfigEditor";
 import type { MCPServer } from "@/types";
+import { authFetch } from "@/lib/api-client";
 
 export function McpManager() {
   const [servers, setServers] = useState<Record<string, MCPServer>>({});
@@ -22,7 +23,7 @@ export function McpManager() {
   const fetchServers = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch("/api/plugins/mcp");
+      const res = await authFetch("/api/plugins/mcp");
       const data = await res.json();
       if (data.mcpServers) {
         setServers(data.mcpServers);
@@ -55,7 +56,7 @@ export function McpManager() {
 
   async function handleDelete(name: string) {
     try {
-      const res = await fetch(`/api/plugins/mcp/${encodeURIComponent(name)}`, {
+      const res = await authFetch(`/api/plugins/mcp/${encodeURIComponent(name)}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -79,7 +80,7 @@ export function McpManager() {
       delete updated[editingName];
       updated[name] = server;
       try {
-        await fetch("/api/plugins/mcp", {
+        await authFetch("/api/plugins/mcp", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ mcpServers: updated }),
@@ -91,7 +92,7 @@ export function McpManager() {
     } else if (editingName) {
       const updated = { ...servers, [name]: server };
       try {
-        await fetch("/api/plugins/mcp", {
+        await authFetch("/api/plugins/mcp", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ mcpServers: updated }),
@@ -102,7 +103,7 @@ export function McpManager() {
       }
     } else {
       try {
-        const res = await fetch("/api/plugins/mcp", {
+        const res = await authFetch("/api/plugins/mcp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, server }),
@@ -122,7 +123,7 @@ export function McpManager() {
   async function handleJsonSave(jsonStr: string) {
     try {
       const parsed = JSON.parse(jsonStr);
-      await fetch("/api/plugins/mcp", {
+      await authFetch("/api/plugins/mcp", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mcpServers: parsed }),

@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { TaskCard } from "./TaskCard";
 import type { TaskItem, TaskStatus } from "@/types";
+import { authFetch } from "@/lib/api-client";
 
 interface TaskListProps {
   sessionId: string;
@@ -26,7 +27,7 @@ export function TaskList({ sessionId }: TaskListProps) {
     if (!sessionId) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/tasks?session_id=${encodeURIComponent(sessionId)}`);
+      const res = await authFetch(`/api/tasks?session_id=${encodeURIComponent(sessionId)}`);
       if (res.ok) {
         const data = await res.json();
         setTasks(data.tasks || []);
@@ -47,7 +48,7 @@ export function TaskList({ sessionId }: TaskListProps) {
     if (!title || !sessionId) return;
 
     try {
-      const res = await fetch("/api/tasks", {
+      const res = await authFetch("/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ session_id: sessionId, title }),
@@ -67,7 +68,7 @@ export function TaskList({ sessionId }: TaskListProps) {
     updates: { title?: string; status?: TaskStatus }
   ) => {
     try {
-      const res = await fetch(`/api/tasks/${id}`, {
+      const res = await authFetch(`/api/tasks/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
@@ -83,7 +84,7 @@ export function TaskList({ sessionId }: TaskListProps) {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/tasks/${id}`, { method: "DELETE" });
+      const res = await authFetch(`/api/tasks/${id}`, { method: "DELETE" });
       if (res.ok) {
         setTasks((prev) => prev.filter((t) => t.id !== id));
       }

@@ -11,6 +11,7 @@ import { UpdateDialog } from "./UpdateDialog";
 import { DocPreview } from "./DocPreview";
 import { PanelContext, type PanelContent, type PreviewViewMode } from "@/hooks/usePanel";
 import { UpdateContext, type UpdateInfo } from "@/hooks/useUpdate";
+import { authFetch } from "@/lib/api-client";
 
 const CHATLIST_MIN = 180;
 const CHATLIST_MAX = 400;
@@ -140,7 +141,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const fetchSkipPermissions = useCallback(async () => {
     try {
-      const res = await fetch("/api/settings/app");
+      const res = await authFetch("/api/settings/app");
       if (res.ok) {
         const data = await res.json();
         setSkipPermissionsActive(data.settings?.dangerously_skip_permissions === "true");
@@ -174,7 +175,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const checkForUpdates = useCallback(async () => {
     setChecking(true);
     try {
-      const res = await fetch("/api/app/updates");
+      const res = await authFetch("/api/app/updates");
       if (!res.ok) return;
       const data: UpdateInfo = await res.json();
       setUpdateInfo(data);

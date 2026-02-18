@@ -35,6 +35,7 @@ import { SquareIcon } from 'lucide-react';
 import type { ChatStatus } from 'ai';
 import type { FileAttachment } from '@/types';
 import { nanoid } from 'nanoid';
+import { authFetch } from "@/lib/api-client";
 
 // Accepted file types for upload
 const ACCEPTED_FILE_TYPES = [
@@ -266,7 +267,7 @@ function FileTreeAttachmentBridge() {
       if (!filePath) return;
 
       try {
-        const res = await fetch(`/api/files/raw?path=${encodeURIComponent(filePath)}`);
+        const res = await authFetch(`/api/files/raw?path=${encodeURIComponent(filePath)}`);
         if (!res.ok) {
           console.warn(`[FileTreeAttachment] Failed to fetch file: ${res.status} ${res.statusText}`, filePath);
           return;
@@ -363,7 +364,7 @@ export function MessageInput({
 
   // Fetch active provider to adapt model labels
   useEffect(() => {
-    fetch('/api/providers')
+    authFetch('/api/providers')
       .then((r) => r.json())
       .then((data) => {
         const active = (data.providers || []).find((p: { is_active: number }) => p.is_active === 1);
@@ -393,7 +394,7 @@ export function MessageInput({
       const params = new URLSearchParams();
       if (sessionId) params.set('session_id', sessionId);
       if (filter) params.set('q', filter);
-      const res = await fetch(`/api/files?${params.toString()}`);
+      const res = await authFetch(`/api/files?${params.toString()}`);
       if (!res.ok) return [];
       const data = await res.json();
       const tree = data.tree || [];
@@ -416,7 +417,7 @@ export function MessageInput({
   const fetchSkills = useCallback(async () => {
     let apiSkills: PopoverItem[] = [];
     try {
-      const res = await fetch('/api/skills');
+      const res = await authFetch('/api/skills');
       if (res.ok) {
         const data = await res.json();
         const skills = data.skills || [];
@@ -579,7 +580,7 @@ export function MessageInput({
           const sourceParam = badge.installedSource
             ? `?source=${badge.installedSource}`
             : "";
-          const res = await fetch(
+          const res = await authFetch(
             `/api/skills/${encodeURIComponent(badge.label)}${sourceParam}`
           );
           if (res.ok) {

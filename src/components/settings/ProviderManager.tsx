@@ -26,6 +26,7 @@ import {
 import { ProviderForm } from "./ProviderForm";
 import type { ProviderFormData } from "./ProviderForm";
 import type { ApiProvider } from "@/types";
+import { authFetch } from "@/lib/api-client";
 
 const QUICK_PRESETS = [
   { name: "Anthropic", provider_type: "anthropic", base_url: "https://api.anthropic.com" },
@@ -63,7 +64,7 @@ export function ProviderManager() {
   const fetchProviders = useCallback(async () => {
     try {
       setError(null);
-      const res = await fetch("/api/providers");
+      const res = await authFetch("/api/providers");
       if (!res.ok) {
         throw new Error("Failed to load providers");
       }
@@ -104,7 +105,7 @@ export function ProviderManager() {
 
   const handleSave = async (data: ProviderFormData) => {
     if (formMode === "edit" && editingProvider) {
-      const res = await fetch(`/api/providers/${editingProvider.id}`, {
+      const res = await authFetch(`/api/providers/${editingProvider.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -118,7 +119,7 @@ export function ProviderManager() {
         prev.map((p) => (p.id === editingProvider.id ? result.provider : p))
       );
     } else {
-      const res = await fetch("/api/providers", {
+      const res = await authFetch("/api/providers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -136,7 +137,7 @@ export function ProviderManager() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/providers/${deleteTarget.id}`, {
+      const res = await authFetch(`/api/providers/${deleteTarget.id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -153,7 +154,7 @@ export function ProviderManager() {
   const handleActivate = async (provider: ApiProvider) => {
     setActivatingId(provider.id);
     try {
-      const res = await fetch(`/api/providers/${provider.id}/activate`, {
+      const res = await authFetch(`/api/providers/${provider.id}/activate`, {
         method: "POST",
       });
       if (res.ok) {
@@ -175,7 +176,7 @@ export function ProviderManager() {
   const handleDeactivate = async (provider: ApiProvider) => {
     setActivatingId(provider.id);
     try {
-      const res = await fetch(`/api/providers/${provider.id}/activate`, {
+      const res = await authFetch(`/api/providers/${provider.id}/activate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ active: false }),

@@ -16,6 +16,7 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ReloadIcon, Loading02Icon } from "@hugeicons/core-free-icons";
 import { useUpdate } from "@/hooks/useUpdate";
+import { authFetch } from "@/lib/api-client";
 
 function UpdateCard() {
   const { updateInfo, checking, checkForUpdates } = useUpdate();
@@ -77,7 +78,7 @@ export function GeneralSection() {
 
   const fetchAppSettings = useCallback(async () => {
     try {
-      const res = await fetch("/api/settings/app");
+      const res = await authFetch("/api/settings/app");
       if (res.ok) {
         const data = await res.json();
         const appSettings = data.settings || {};
@@ -103,7 +104,7 @@ export function GeneralSection() {
   const saveSkipPermissions = async (enabled: boolean) => {
     setSkipPermSaving(true);
     try {
-      const res = await fetch("/api/settings/app", {
+      const res = await authFetch("/api/settings/app", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
