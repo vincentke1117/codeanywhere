@@ -197,7 +197,7 @@ function extractTokenUsage(msg: SDKResultMessage): TokenUsage | null {
 /**
  * Get file paths for non-image attachments. If the file already has a
  * persisted filePath (written by the uploads route), reuse it. Otherwise
- * fall back to writing the file to .codepilot-uploads/.
+ * fall back to writing the file to .codeanywhere-uploads/.
  */
 function getUploadedFilePaths(files: FileAttachment[], workDir: string): string[] {
   const paths: string[] = [];
@@ -208,7 +208,7 @@ function getUploadedFilePaths(files: FileAttachment[], workDir: string): string[
     } else {
       // Fallback: write file to disk (should not happen in normal flow)
       if (!uploadDir) {
-        uploadDir = path.join(workDir, '.codepilot-uploads');
+        uploadDir = path.join(workDir, '.codeanywhere-uploads');
         if (!fs.existsSync(uploadDir)) {
           fs.mkdirSync(uploadDir, { recursive: true });
         }
