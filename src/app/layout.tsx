@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CodePilot",
-  description: "A desktop GUI for Claude Code",
+  title: "CodeAnywhere",
+  description: "A web GUI for Claude Code",
 };
 
 export default function RootLayout({

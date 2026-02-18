@@ -17,8 +17,8 @@ import os from 'os';
 import fs from 'fs';
 
 // Set a temp data dir before importing db module
-const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'codepilot-db-test-'));
-process.env.CLAUDE_GUI_DATA_DIR = tmpDir;
+const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'codeanywhere-db-test-'));
+process.env.CODEANYWHERE_DATA_DIR = tmpDir;
 
 // Use require to avoid top-level await issues with CJS output
 /* eslint-disable @typescript-eslint/no-require-imports */
@@ -80,7 +80,7 @@ describe('closeDb', () => {
     createSession('WAL Test 2');
     createSession('WAL Test 3');
 
-    const dbPath = path.join(tmpDir, 'codepilot.db');
+    const dbPath = path.join(tmpDir, 'codeanywhere.db');
     assert.ok(fs.existsSync(dbPath));
 
     // Close the database (should checkpoint WAL)

@@ -1,12 +1,12 @@
-<img src="docs/icon-readme.png" width="32" height="32" alt="CodePilot" style="vertical-align: middle; margin-right: 8px;" /> CodePilot
+<img src="docs/icon-readme.png" width="32" height="32" alt="CodeAnywhere" style="vertical-align: middle; margin-right: 8px;" /> CodeAnywhere
 ===
 
 **Claude Code 的桌面 GUI 客户端** -- 通过可视化界面进行对话、编码和项目管理，无需在终端中操作。
 
 [English](./README.md) | [日本語](./README_JA.md)
 
-[![GitHub release](https://img.shields.io/github/v/release/op7418/CodePilot)](https://github.com/op7418/CodePilot/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)](https://github.com/op7418/CodePilot/releases)
+[![GitHub release](https://img.shields.io/github/v/release/op7418/CodeAnywhere)](https://github.com/op7418/CodeAnywhere/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)](https://github.com/op7418/CodeAnywhere/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 ---
@@ -34,7 +34,7 @@
 
 ## 截图
 
-![CodePilot](docs/screenshot.png)
+![CodeAnywhere](docs/screenshot.png)
 
 ---
 
@@ -46,7 +46,7 @@
 | **Claude Code CLI** | 已安装并完成认证（`claude --version` 可正常运行） |
 | **npm** | 9+（Node 18 自带） |
 
-> **注意**：CodePilot 底层调用 Claude Code Agent SDK。请确保 `claude` 命令在 `PATH` 中可用，并且已完成认证（`claude login`）。
+> **注意**：CodeAnywhere 底层调用 Claude Code Agent SDK。请确保 `claude` 命令在 `PATH` 中可用，并且已完成认证（`claude login`）。
 
 ---
 
@@ -54,8 +54,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/op7418/CodePilot.git
-cd CodePilot
+git clone https://github.com/op7418/CodeAnywhere.git
+cd CodeAnywhere
 
 # 安装依赖
 npm install
@@ -73,7 +73,7 @@ npm run electron:dev
 
 ## 下载
 
-预编译版本可在 [Releases](https://github.com/op7418/CodePilot/releases) 页面下载。所有平台的安装包均由 GitHub Actions 自动构建发布。
+预编译版本可在 [Releases](https://github.com/op7418/CodeAnywhere/releases) 页面下载。所有平台的安装包均由 GitHub Actions 自动构建发布。
 
 ### 支持平台
 
@@ -85,7 +85,7 @@ npm run electron:dev
 
 ## 安装问题排查
 
-CodePilot 尚未进行代码签名，因此操作系统在首次打开时会显示安全警告。
+CodeAnywhere 尚未进行代码签名，因此操作系统在首次打开时会显示安全警告。
 
 ### macOS
 
@@ -93,7 +93,7 @@ CodePilot 尚未进行代码签名，因此操作系统在首次打开时会显�
 
 **方案一 -- 右键打开**
 
-1. 在访达中右键（或 Control-点击）`CodePilot.app`
+1. 在访达中右键（或 Control-点击）`CodeAnywhere.app`
 2. 从右键菜单中选择 **打开**
 3. 在确认对话框中点击 **打开**
 
@@ -101,13 +101,13 @@ CodePilot 尚未进行代码签名，因此操作系统在首次打开时会显�
 
 1. 打开 **系统设置** > **隐私与安全性**
 2. 向下滚动到 **安全性** 部分
-3. 你会看到关于 CodePilot 被阻止的提示，点击 **仍要打开**
+3. 你会看到关于 CodeAnywhere 被阻止的提示，点击 **仍要打开**
 4. 如有提示则输入密码验证，然后启动应用
 
 **方案三 -- 终端命令**
 
 ```bash
-xattr -cr /Applications/CodePilot.app
+xattr -cr /Applications/CodeAnywhere.app
 ```
 
 此命令会移除隔离属性，macOS 将不再阻止该应用。
@@ -151,7 +151,7 @@ Windows SmartScreen 会阻止安装程序或可执行文件。
 ## 项目结构
 
 ```
-codepilot/
+codeanywhere/
 ├── .github/workflows/      # CI/CD：多平台构建和自动发版
 ├── electron/                # Electron 主进程和预加载脚本
 │   ├── main.ts              # 窗口创建、内嵌服务器生命周期管理
@@ -228,7 +228,7 @@ git push origin v0.8.1
 ### 说明
 
 - Electron 主进程（`electron/main.ts`）会 fork Next.js standalone 服务器，通过 `127.0.0.1` 上的随机可用端口进行连接
-- 聊天数据存储在 `~/.codepilot/codepilot.db`（开发模式下为 `./data/`）
+- 聊天数据存储在 `~/.codeanywhere/codeanywhere.db`（开发模式下为 `./data/`）
 - 应用使用 SQLite WAL 模式，并发读取性能优秀
 
 ---

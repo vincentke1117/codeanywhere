@@ -64,10 +64,10 @@ linux:
   artifactName: "${productName}-${version}-${arch}.${ext}"
   desktop:
     entry:
-      Name: CodePilot
+      Name: CodeAnywhere
       Comment: A native desktop GUI for Claude Code
       Categories: Development;IDE;
-      StartupWMClass: codepilot
+      StartupWMClass: codeanywhere
   target:
     - target: AppImage
       arch: [x64, arm64]

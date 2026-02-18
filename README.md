@@ -1,10 +1,10 @@
-<img src="docs/icon-readme.png" width="32" height="32" alt="CodePilot" style="vertical-align: middle; margin-right: 8px;" /> CodePilot
+<img src="docs/icon-readme.png" width="32" height="32" alt="CodeAnywhere" style="vertical-align: middle; margin-right: 8px;" /> CodeAnywhere
 ===
 
 **A desktop GUI client for Claude Code** -- chat, code, and manage projects through a polished visual interface instead of the terminal.
 
-[![GitHub release](https://img.shields.io/github/v/release/op7418/CodePilot)](https://github.com/op7418/CodePilot/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)](https://github.com/op7418/CodePilot/releases)
+[![GitHub release](https://img.shields.io/github/v/release/op7418/CodeAnywhere)](https://github.com/op7418/CodeAnywhere/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)](https://github.com/op7418/CodeAnywhere/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 [中文文档](./README_CN.md) | [日本語](./README_JA.md)
@@ -34,13 +34,13 @@
 
 ## Screenshots
 
-![CodePilot](docs/screenshot.png)
+![CodeAnywhere](docs/screenshot.png)
 
 ---
 
 ## Prerequisites
 
-> **Important**: CodePilot calls the Claude Code Agent SDK under the hood. Make sure `claude` is available on your `PATH` and that you have authenticated (`claude login`) before launching the app.
+> **Important**: CodeAnywhere calls the Claude Code Agent SDK under the hood. Make sure `claude` is available on your `PATH` and that you have authenticated (`claude login`) before launching the app.
 
 | Requirement | Minimum version |
 |---|---|
@@ -52,7 +52,7 @@
 
 ## Download
 
-Pre-built releases are available on the [**Releases**](https://github.com/op7418/CodePilot/releases) page. Releases are built automatically via GitHub Actions for all platforms.
+Pre-built releases are available on the [**Releases**](https://github.com/op7418/CodeAnywhere/releases) page. Releases are built automatically via GitHub Actions for all platforms.
 
 ### Supported Platforms
 
@@ -66,8 +66,8 @@ Pre-built releases are available on the [**Releases**](https://github.com/op7418
 
 ```bash
 # Clone the repository
-git clone https://github.com/op7418/CodePilot.git
-cd CodePilot
+git clone https://github.com/op7418/CodeAnywhere.git
+cd CodeAnywhere
 
 # Install dependencies
 npm install
@@ -85,7 +85,7 @@ Then open [http://localhost:3000](http://localhost:3000) (browser mode) or wait 
 
 ## Installation Troubleshooting
 
-CodePilot is not code-signed yet, so your operating system will display a security warning the first time you open it.
+CodeAnywhere is not code-signed yet, so your operating system will display a security warning the first time you open it.
 
 ### macOS
 
@@ -93,7 +93,7 @@ You will see a dialog that says **"Apple cannot check it for malicious software"
 
 **Option 1 -- Right-click to open**
 
-1. Right-click (or Control-click) `CodePilot.app` in Finder.
+1. Right-click (or Control-click) `CodeAnywhere.app` in Finder.
 2. Select **Open** from the context menu.
 3. Click **Open** in the confirmation dialog.
 
@@ -101,13 +101,13 @@ You will see a dialog that says **"Apple cannot check it for malicious software"
 
 1. Open **System Settings** > **Privacy & Security**.
 2. Scroll down to the **Security** section.
-3. You will see a message about CodePilot being blocked. Click **Open Anyway**.
+3. You will see a message about CodeAnywhere being blocked. Click **Open Anyway**.
 4. Authenticate if prompted, then launch the app.
 
 **Option 3 -- Terminal command**
 
 ```bash
-xattr -cr /Applications/CodePilot.app
+xattr -cr /Applications/CodeAnywhere.app
 ```
 
 This strips the quarantine attribute so macOS will no longer block the app.
@@ -151,7 +151,7 @@ Windows SmartScreen will block the installer or executable.
 ## Project Structure
 
 ```
-codepilot/
+codeanywhere/
 ├── .github/workflows/      # CI/CD: multi-platform build & auto-release
 ├── electron/                # Electron main process & preload
 │   ├── main.ts              # Window creation, embedded server lifecycle
@@ -228,7 +228,7 @@ You can also manually trigger builds for individual platforms from the Actions t
 ### Notes
 
 - The Electron main process (`electron/main.ts`) forks the Next.js standalone server and connects to it over `127.0.0.1` with a random free port.
-- Chat data is stored in `~/.codepilot/codepilot.db` (or `./data/codepilot.db` in dev mode).
+- Chat data is stored in `~/.codeanywhere/codeanywhere.db` (or `./data/codeanywhere.db` in dev mode).
 - The app uses WAL mode for SQLite, so concurrent reads are fast.
 
 ---

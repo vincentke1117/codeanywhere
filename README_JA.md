@@ -1,10 +1,10 @@
-<img src="docs/icon-readme.png" width="32" height="32" alt="CodePilot" style="vertical-align: middle; margin-right: 8px;" /> CodePilot
+<img src="docs/icon-readme.png" width="32" height="32" alt="CodeAnywhere" style="vertical-align: middle; margin-right: 8px;" /> CodeAnywhere
 ===
 
 **Claude Code のデスクトップ GUI クライアント** -- ターミナルではなく、洗練されたビジュアルインターフェースを通じてチャット、コーディング、プロジェクト管理を行えます。
 
-[![GitHub release](https://img.shields.io/github/v/release/op7418/CodePilot)](https://github.com/op7418/CodePilot/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)](https://github.com/op7418/CodePilot/releases)
+[![GitHub release](https://img.shields.io/github/v/release/op7418/CodeAnywhere)](https://github.com/op7418/CodeAnywhere/releases)
+[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)](https://github.com/op7418/CodeAnywhere/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 [English](./README.md) | [中文文档](./README_CN.md)
@@ -31,13 +31,13 @@
 
 ## スクリーンショット
 
-![CodePilot](docs/screenshot.png)
+![CodeAnywhere](docs/screenshot.png)
 
 ---
 
 ## 前提条件
 
-> **重要**: CodePilot は Claude Code Agent SDK を内部で呼び出します。アプリを起動する前に、`claude` が `PATH` で利用可能であることを確認し、認証済み (`claude login`) であることを確認してください。
+> **重要**: CodeAnywhere は Claude Code Agent SDK を内部で呼び出します。アプリを起動する前に、`claude` が `PATH` で利用可能であることを確認し、認証済み (`claude login`) であることを確認してください。
 
 | 要件 | 最小バージョン |
 |---|---|
@@ -49,7 +49,7 @@
 
 ## ダウンロード
 
-プリビルド版のリリースは [**Releases**](https://github.com/op7418/CodePilot/releases) ページから利用できます。
+プリビルド版のリリースは [**Releases**](https://github.com/op7418/CodeAnywhere/releases) ページから利用できます。
 
 ### サポートプラットフォーム
 
@@ -63,8 +63,8 @@
 
 ```bash
 # リポジトリのクローン
-git clone https://github.com/op7418/CodePilot.git
-cd codepilot
+git clone https://github.com/op7418/CodeAnywhere.git
+cd codeanywhere
 
 # 依存関係のインストール
 npm install
@@ -82,7 +82,7 @@ npm run electron:dev
 
 ## インストールのトラブルシューティング
 
-CodePilot はまだコード署名されていないため、初回起動時にオペレーティングシステムがセキュリティ警告を表示します。
+CodeAnywhere はまだコード署名されていないため、初回起動時にオペレーティングシステムがセキュリティ警告を表示します。
 
 ### macOS
 
@@ -90,7 +90,7 @@ CodePilot はまだコード署名されていないため、初回起動時に�
 
 **オプション 1 -- 右クリックで開く**
 
-1. Finder で `CodePilot.app` を右クリック（または Control キーを押しながらクリック）します。
+1. Finder で `CodeAnywhere.app` を右クリック（または Control キーを押しながらクリック）します。
 2. コンテキストメニューから **開く** を選択します。
 3. 確認ダイアログで **開く** をクリックします。
 
@@ -98,13 +98,13 @@ CodePilot はまだコード署名されていないため、初回起動時に�
 
 1. **システム設定** > **プライバシーとセキュリティ** を開きます。
 2. **セキュリティ** セクションまでスクロールします。
-3. CodePilot がブロックされているというメッセージが表示されます。**このまま開く** をクリックします。
+3. CodeAnywhere がブロックされているというメッセージが表示されます。**このまま開く** をクリックします。
 4. 必要に応じて認証を行い、アプリを起動します。
 
 **オプション 3 -- ターミナルコマンド**
 
 ```bash
-xattr -cr /Applications/CodePilot.app
+xattr -cr /Applications/CodeAnywhere.app
 ```
 
 これは隔離属性を削除するため、macOS はアプリをブロックしなくなります。
@@ -147,7 +147,7 @@ Windows SmartScreen はインストーラーまたは実行ファイルをブロ
 ## プロジェクト構成
 
 ```
-codepilot/
+codeanywhere/
 ├── electron/                # Electron メインプロセス＆プリロード
 │   ├── main.ts              # ウィンドウ作成、組み込みサーバーライフサイクル
 │   └── preload.ts           # コンテキスト ブリッジ
@@ -209,7 +209,7 @@ npm run electron:pack
 ### メモ
 
 - Electron メインプロセス（`electron/main.ts`）は Next.js スタンドアロン サーバーをフォークし、`127.0.0.1` 経由でランダムなフリーポートで接続します。
-- チャット データは `~/.codepilot/codepilot.db`（または開発モードでは `./data/codepilot.db`）に保存されます。
+- チャット データは `~/.codeanywhere/codeanywhere.db`（または開発モードでは `./data/codeanywhere.db`）に保存されます。
 - アプリは SQLite の WAL モードを使用するため、同時読み込みは高速です。
 
 ---
