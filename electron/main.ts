@@ -126,7 +126,7 @@ function checkNativeModuleABI(): void {
     if (msg.includes('NODE_MODULE_VERSION')) {
       console.error(`[ABI check] ABI mismatch detected: ${msg}`);
       dialog.showErrorBox(
-        'CodePilot - Native Module ABI Mismatch',
+        'CodeAnywhere - Native Module ABI Mismatch',
         `The bundled better-sqlite3 native module was compiled for a different Node.js version.\n\n` +
         `${msg}\n\n` +
         `This usually means the build process did not correctly recompile native modules for Electron.\n` +
@@ -274,7 +274,7 @@ function startServer(port: number): Electron.UtilityProcess {
     ...userShellEnv,
     PORT: String(port),
     HOSTNAME: '127.0.0.1',
-    CLAUDE_GUI_DATA_DIR: path.join(home, '.codepilot'),
+    CODEANYWHERE_DATA_DIR: path.join(home, '.codeanywhere'),
     HOME: home,
     USERPROFILE: home,
     PATH: constructedPath,
@@ -286,7 +286,7 @@ function startServer(port: number): Electron.UtilityProcess {
     env,
     cwd: standaloneDir,
     stdio: 'pipe',
-    serviceName: 'codepilot-server',
+    serviceName: 'codeanywhere-server',
   });
 
   child.stdout?.on('data', (data: Buffer) => {
@@ -726,7 +726,7 @@ app.whenReady().then(async () => {
   } catch (err) {
     console.error('Failed to start:', err);
     dialog.showErrorBox(
-      'CodePilot - Failed to Start',
+      'CodeAnywhere - Failed to Start',
       `The internal server could not start.\n\n${err instanceof Error ? err.message : String(err)}\n\nPlease try restarting the application.`
     );
     app.quit();

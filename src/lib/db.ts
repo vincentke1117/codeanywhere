@@ -5,13 +5,54 @@ import fs from 'fs';
 import os from 'os';
 import type { ChatSession, Message, SettingsMap, TaskItem, TaskStatus, ApiProvider, CreateProviderRequest, UpdateProviderRequest } from '@/types';
 
-const dataDir = process.env.CLAUDE_GUI_DATA_DIR || path.join(os.homedir(), '.codepilot');
-const DB_PATH = path.join(dataDir, 'codepilot.db');
+const dataDir = process.env.CODEANYWHERE_DATA_DIR || path.join(os.homedir(), '.codeanywhere');
+const DB_PATH = path.join(dataDir, 'codeanywhere.db');
 
 let db: Database.Database | null = null;
 
+/**
+ * Migrate data from ~/.codepilot to ~/.codeanywhere.
+ * Copies DB files (does not move — keeps old as backup).
+ */
+function migrateFromCodePilot(): void {
+  const home = os.homedir();
+  const oldDir = path.join(home, '.codepilot');
+  const newDir = path.join(home, '.codeanywhere');
+
+  // Skip if old dir doesn't exist or new dir already has a database
+  if (!fs.existsSync(oldDir)) return;
+  if (fs.existsSync(path.join(newDir, 'codeanywhere.db'))) return;
+
+  try {
+    // Ensure new directory exists
+    fs.mkdirSync(newDir, { recursive: true });
+
+    // Copy database files (not move — keep old as backup)
+    const filesToCopy = ['codepilot.db', 'codepilot.db-wal', 'codepilot.db-shm'];
+    for (const file of filesToCopy) {
+      const src = path.join(oldDir, file);
+      if (fs.existsSync(src)) {
+        // For the main db file, rename to new name; for WAL/SHM keep extensions
+        const destName = file === 'codepilot.db'
+          ? 'codeanywhere.db'
+          : file.replace('codepilot.db', 'codeanywhere.db');
+        fs.copyFileSync(src, path.join(newDir, destName));
+      }
+    }
+
+    // Mark old directory as migrated
+    fs.renameSync(oldDir, oldDir + '.migrated');
+    console.log('[db] Migrated data from ~/.codepilot to ~/.codeanywhere');
+  } catch (err) {
+    console.error('[db] Migration from ~/.codepilot failed, continuing with new directory:', err);
+  }
+}
+
 export function getDb(): Database.Database {
   if (!db) {
+    // Try migrating from old CodePilot directory first
+    migrateFromCodePilot();
+
     const dir = path.dirname(DB_PATH);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
@@ -21,6 +62,8 @@ export function getDb(): Database.Database {
     if (!fs.existsSync(DB_PATH)) {
       const home = os.homedir();
       const oldPaths = [
+        // Old CodePilot data directory
+        path.join(home, '.codepilot', 'codepilot.db'),
         // Old Electron userData paths (app.getPath('userData'))
         path.join(home, 'Library', 'Application Support', 'CodePilot', 'codepilot.db'),
         path.join(home, 'Library', 'Application Support', 'codepilot', 'codepilot.db'),
