@@ -99,7 +99,7 @@ export function ConnectionStatus() {
       !dialogOpen &&
       !wizardOpen
     ) {
-      const dismissed = localStorage.getItem("codepilot:install-wizard-dismissed");
+      const dismissed = localStorage.getItem("codeanywhere:install-wizard-dismissed");
       if (!dismissed) {
         autoPromptedRef.current = true;
         setWizardOpen(true); // eslint-disable-line react-hooks/set-state-in-effect -- intentional: auto-prompt on first disconnect
@@ -111,7 +111,7 @@ export function ConnectionStatus() {
     setWizardOpen(open);
     if (!open) {
       // Remember that user dismissed the wizard so we don't auto-prompt again
-      localStorage.setItem("codepilot:install-wizard-dismissed", "1");
+      localStorage.setItem("codeanywhere:install-wizard-dismissed", "1");
     }
   }, []);
 

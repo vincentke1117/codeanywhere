@@ -81,7 +81,7 @@ export default function ChatSessionPage({ params }: ChatSessionPageProps) {
           const data: { session: ChatSession } = await res.json();
           if (data.session.working_directory) {
             setWorkingDirectory(data.session.working_directory);
-            localStorage.setItem("codepilot:last-working-directory", data.session.working_directory);
+            localStorage.setItem("codeanywhere:last-working-directory", data.session.working_directory);
           }
           setSessionId(id);
           setPanelOpen(true);

@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils';
 
-interface CodePilotLogoProps {
+interface CodeAnywhereLogoProps {
   className?: string;
 }
 
-export function CodePilotLogo({ className }: CodePilotLogoProps) {
+export function CodeAnywhereLogo({ className }: CodeAnywhereLogoProps) {
   return (
     <svg
       viewBox="-150 -150 300 300"
@@ -18,7 +18,7 @@ export function CodePilotLogo({ className }: CodePilotLogoProps) {
       />
 
       <defs>
-        <g id="codepilot-cube">
+        <g id="codeanywhere-cube">
           {/* Top Face */}
           <path
             d="M0,0 L0,-30 L25.98,-15 L25.98,15 Z"
@@ -47,29 +47,29 @@ export function CodePilotLogo({ className }: CodePilotLogoProps) {
       </defs>
 
       {/* Layer Z = -1 (Bottom) */}
-      <use href="#codepilot-cube" x="-25.98" y="15" />
-      <use href="#codepilot-cube" x="25.98"  y="15" />
-      <use href="#codepilot-cube" x="0"      y="30" />
-      <use href="#codepilot-cube" x="-25.98" y="45" />
-      <use href="#codepilot-cube" x="25.98"  y="45" />
+      <use href="#codeanywhere-cube" x="-25.98" y="15" />
+      <use href="#codeanywhere-cube" x="25.98"  y="15" />
+      <use href="#codeanywhere-cube" x="0"      y="30" />
+      <use href="#codeanywhere-cube" x="-25.98" y="45" />
+      <use href="#codeanywhere-cube" x="25.98"  y="45" />
 
       {/* Layer Z = 0 (Middle) */}
-      <use href="#codepilot-cube" x="0"      y="-30" />
-      <use href="#codepilot-cube" x="-25.98" y="-15" />
-      <use href="#codepilot-cube" x="25.98"  y="-15" />
-      <use href="#codepilot-cube" x="0"      y="0" />
-      <use href="#codepilot-cube" x="-51.96" y="0" />
-      <use href="#codepilot-cube" x="51.96"  y="0" />
-      <use href="#codepilot-cube" x="-25.98" y="15" />
-      <use href="#codepilot-cube" x="25.98"  y="15" />
-      <use href="#codepilot-cube" x="0"      y="30" />
+      <use href="#codeanywhere-cube" x="0"      y="-30" />
+      <use href="#codeanywhere-cube" x="-25.98" y="-15" />
+      <use href="#codeanywhere-cube" x="25.98"  y="-15" />
+      <use href="#codeanywhere-cube" x="0"      y="0" />
+      <use href="#codeanywhere-cube" x="-51.96" y="0" />
+      <use href="#codeanywhere-cube" x="51.96"  y="0" />
+      <use href="#codeanywhere-cube" x="-25.98" y="15" />
+      <use href="#codeanywhere-cube" x="25.98"  y="15" />
+      <use href="#codeanywhere-cube" x="0"      y="30" />
 
       {/* Layer Z = 1 (Top) */}
-      <use href="#codepilot-cube" x="-25.98" y="-45" />
-      <use href="#codepilot-cube" x="25.98"  y="-45" />
-      <use href="#codepilot-cube" x="0"      y="-30" />
-      <use href="#codepilot-cube" x="-25.98" y="-15" />
-      <use href="#codepilot-cube" x="25.98"  y="-15" />
+      <use href="#codeanywhere-cube" x="-25.98" y="-45" />
+      <use href="#codeanywhere-cube" x="25.98"  y="-45" />
+      <use href="#codeanywhere-cube" x="0"      y="-30" />
+      <use href="#codeanywhere-cube" x="-25.98" y="-15" />
+      <use href="#codeanywhere-cube" x="25.98"  y="-15" />
     </svg>
   );
 }

@@ -10,7 +10,7 @@ import {
 } from '@/components/ai-elements/conversation';
 import { MessageItem } from './MessageItem';
 import { StreamingMessage } from './StreamingMessage';
-import { CodePilotLogo } from './CodePilotLogo';
+import { CodeAnywhereLogo } from './CodeAnywhereLogo';
 
 interface ToolUseInfo {
   id: string;
@@ -87,7 +87,7 @@ export function MessageList({
         <ConversationEmptyState
           title="Claude Chat"
           description="Start a conversation with Claude. Ask questions, get help with code, or explore ideas."
-          icon={<CodePilotLogo className="h-16 w-16" />}
+          icon={<CodeAnywhereLogo className="h-16 w-16" />}
         />
       </div>
     );
