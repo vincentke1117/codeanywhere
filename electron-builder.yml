@@ -1,5 +1,5 @@
-appId: com.codepilot.app
-productName: CodePilot
+appId: com.codeanywhere.app
+productName: CodeAnywhere
 directories:
   output: release
 files:
