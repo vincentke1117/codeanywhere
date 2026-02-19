@@ -1,10 +1,10 @@
 <img src="docs/icon-readme.png" width="32" height="32" alt="CodeAnywhere" style="vertical-align: middle; margin-right: 8px;" /> CodeAnywhere
 ===
 
-**Claude Code のデスクトップ GUI クライアント** -- ターミナルではなく、洗練されたビジュアルインターフェースを通じてチャット、コーディング、プロジェクト管理を行えます。
+**Claude Code の Web GUI クライアント** -- モバイルを含む任意のブラウザからアクセスできる、洗練されたビジュアルインターフェースを通じてチャット、コーディング、プロジェクト管理を行えます。
 
 [![GitHub release](https://img.shields.io/github/v/release/op7418/CodeAnywhere)](https://github.com/op7418/CodeAnywhere/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)](https://github.com/op7418/CodeAnywhere/releases)
+[![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Docker%20%7C%20PWA-blue)](https://github.com/op7418/CodeAnywhere/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 [English](./README.md) | [中文文档](./README_CN.md)
@@ -13,19 +13,20 @@
 
 ## 機能
 
-- **💬 会話型コーディング** -- Claude からのレスポンスをリアルタイムでストリーミング受信します。完全な Markdown レンダリング、シンタックスハイライトされたコードブロック、ツール呼び出しの可視化に対応しています。
-- **📂 セッション管理** -- チャットセッションの作成、名前変更、アーカイブ、再開ができます。会話は SQLite にローカル保存されるため、再起動後もデータが失われません。
-- **🎯 プロジェクト対応コンテキスト** -- セッションごとに作業ディレクトリを指定できます。右パネルにはライブファイルツリーとファイルプレビューが表示されるため、Claude が何を見ているかが常にわかります。
-- **🔒 権限制御** -- ツール使用をアクション単位で承認、拒否、または自動許可できます。お好みに応じて権限モードを選択できます。
-- **🎭 複数の相互作用モード** -- *Code*、*Plan*、*Ask* モード間で切り替えて、各セッションで Claude の動作を制御できます。
-- **🤖 モデルセレクター** -- 会話中に Claude モデル（Opus、Sonnet、Haiku）を切り替えられます。
-- **🔌 MCP サーバー管理** -- Model Context Protocol サーバーをエクステンション ページから直接追加、設定、削除できます。`stdio`、`sse`、`http` トランスポート型に対応しています。
-- **⚡ カスタムスキル** -- スラッシュコマンドとして呼び出し可能な、再利用可能なプロンプトベースのスキル（グローバルまたはプロジェクト単位）を定義できます。
-- **⚙️ 設定エディター** -- `~/.claude/settings.json` のビジュアルエディターと JSON エディター。権限と環境変数の設定に対応しています。
-- **📊 トークン使用量追跡** -- アシスタントのレスポンスごとに入力/出力トークン数と推定コストが表示されます。
-- **🌗 ダーク / ライト テーマ** -- ナビゲーションレールのワンクリックでテーマを切り替えられます。
-- **⌨️ スラッシュコマンド** -- `/help`、`/clear`、`/cost`、`/compact`、`/doctor`、`/review` などの組み込みコマンドを使用できます。
-- **🖥️ Electron パッケージング** -- 隠れたタイトルバー、バンドルされた Next.js サーバー、自動ポート割り当てを備えたデスクトップ アプリとして配布されます。
+- **会話型コーディング** -- Claude からのレスポンスをリアルタイムでストリーミング受信します。完全な Markdown レンダリング、シンタックスハイライトされたコードブロック、ツール呼び出しの可視化に対応しています。
+- **セッション管理** -- チャットセッションの作成、名前変更、アーカイブ、再開ができます。会話は SQLite にローカル保存されるため、再起動後もデータが失われません。
+- **プロジェクト対応コンテキスト** -- セッションごとに作業ディレクトリを指定できます。右パネルにはライブファイルツリーとファイルプレビューが表示されるため、Claude が何を見ているかが常にわかります。
+- **権限制御** -- ツール使用をアクション単位で承認、拒否、または自動許可できます。
+- **複数の相互作用モード** -- *Code*、*Plan*、*Ask* モード間で切り替えて、各セッションで Claude の動作を制御できます。
+- **モデルセレクター** -- 会話中に Claude モデル（Opus、Sonnet、Haiku）を切り替えられます。
+- **MCP サーバー管理** -- Model Context Protocol サーバーをエクステンションページから直接追加、設定、削除できます。`stdio`、`sse`、`http` トランスポート型に対応しています。
+- **カスタムスキル** -- スラッシュコマンドとして呼び出し可能な、再利用可能なプロンプトベースのスキルを定義できます。
+- **設定エディター** -- `~/.claude/settings.json` のビジュアルエディターと JSON エディター。
+- **トークン使用量追跡** -- アシスタントのレスポンスごとに入力/出力トークン数と推定コストが表示されます。
+- **PWA インストール** -- モバイルまたはデスクトップのホーム画面に追加して、ネイティブアプリのような体験ができます。
+- **ダーク / ライト テーマ** -- ナビゲーションレールのワンクリックでテーマを切り替えられます。
+- **スラッシュコマンド** -- `/help`、`/clear`、`/cost`、`/compact`、`/doctor`、`/review` などの組み込みコマンドを使用できます。
+- **トークン認証** -- `AUTH_TOKEN` を設定して、ネットワーク公開時にインスタンスを保護できます。
 
 ---
 
@@ -47,100 +48,71 @@
 
 ---
 
-## ダウンロード
-
-プリビルド版のリリースは [**Releases**](https://github.com/op7418/CodeAnywhere/releases) ページから利用できます。
-
-### サポートプラットフォーム
-
-- **macOS**: ユニバーサルバイナリ（arm64 + x64）を `.dmg` として配布
-- **Windows**: x64 を `.zip` として配布
-- **Linux**: x64 と arm64 を `.AppImage`、`.deb`、`.rpm` として配布
-
----
-
 ## クイックスタート
 
 ```bash
 # リポジトリのクローン
 git clone https://github.com/op7418/CodeAnywhere.git
-cd codeanywhere
+cd CodeAnywhere
 
 # 依存関係のインストール
 npm install
 
-# 開発モードで起動（ブラウザ）
+# 開発モードで起動
 npm run dev
-
-# -- または、開発モードで完全な Electron アプリを起動 --
-npm run electron:dev
 ```
 
-その後、[http://localhost:3000](http://localhost:3000)（ブラウザモード）を開くか、Electron ウィンドウが表示されるまで待ちます。
+その後、[http://localhost:3000](http://localhost:3000) を開きます。
 
 ---
 
-## インストールのトラブルシューティング
+## デプロイ
 
-CodeAnywhere はまだコード署名されていないため、初回起動時にオペレーティングシステムがセキュリティ警告を表示します。
-
-### macOS
-
-**「Apple はこのソフトウェアを確認できません」** というダイアログが表示されます。
-
-**オプション 1 -- 右クリックで開く**
-
-1. Finder で `CodeAnywhere.app` を右クリック（または Control キーを押しながらクリック）します。
-2. コンテキストメニューから **開く** を選択します。
-3. 確認ダイアログで **開く** をクリックします。
-
-**オプション 2 -- システム設定**
-
-1. **システム設定** > **プライバシーとセキュリティ** を開きます。
-2. **セキュリティ** セクションまでスクロールします。
-3. CodeAnywhere がブロックされているというメッセージが表示されます。**このまま開く** をクリックします。
-4. 必要に応じて認証を行い、アプリを起動します。
-
-**オプション 3 -- ターミナルコマンド**
+### Docker（セルフホスティング推奨）
 
 ```bash
-xattr -cr /Applications/CodeAnywhere.app
+# 環境変数を設定
+cp .env.example .env
+# .env に AUTH_TOKEN を設定してインスタンスを保護
+
+# Docker Compose で起動
+docker compose up -d
 ```
 
-これは隔離属性を削除するため、macOS はアプリをブロックしなくなります。
+アプリは `http://localhost:3000` で利用できます。
 
-### Windows
+### スタンドアロン Node.js
 
-Windows SmartScreen はインストーラーまたは実行ファイルをブロックします。
+```bash
+npm run build
+npm run start
+```
 
-**オプション 1 -- 実行を続ける**
+### 環境変数
 
-1. SmartScreen ダイアログで **詳細情報** をクリックします。
-2. **実行を続ける** をクリックします。
-
-**オプション 2 -- アプリインストール制御を無効にする**
-
-1. **設定** > **アプリ** > **詳細アプリ設定** を開きます。
-2. **アプリインストール制御**（または「アプリの取得元」）をトグルして、どこからでもアプリをインストール可能にします。
+| 変数 | 説明 | デフォルト |
+|---|---|---|
+| `AUTH_TOKEN` | アプリへのアクセスに必要な Bearer トークン。未設定の場合は認証を無効化（ローカル専用）。 | 未設定 |
+| `PORT` | HTTP ポート | `3000` |
 
 ---
 
-## テック スタック
+## テックスタック
 
 | レイヤー | テクノロジー |
 |---|---|
-| フレームワーク | [Next.js 16](https://nextjs.org/)（App Router） |
-| デスクトップシェル | [Electron 40](https://www.electronjs.org/) |
+| フレームワーク | [Next.js 16](https://nextjs.org/)（App Router、standalone） |
+| PWA | Service Worker + Web App Manifest |
 | UI コンポーネント | [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/) |
 | スタイリング | [Tailwind CSS 4](https://tailwindcss.com/) |
-| アニメーション | [Motion](https://motion.dev/)（Framer Motion） |
+| アニメーション | [Motion](https://motion.dev/) |
 | AI 統合 | [Claude Agent SDK](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk) |
 | データベース | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3)（組み込み、ユーザーごと） |
 | Markdown | react-markdown + remark-gfm + rehype-raw + [Shiki](https://shiki.style/) |
-| ストリーミング | [Vercel AI SDK](https://sdk.vercel.ai/) ヘルパー + Server-Sent Events |
+| ストリーミング | Server-Sent Events |
 | アイコン | [Hugeicons](https://hugeicons.com/) + [Lucide](https://lucide.dev/) |
-| テスト | [Playwright](https://playwright.dev/) |
-| ビルド / パック | electron-builder + esbuild |
+| デプロイ | [Docker](https://www.docker.com/) |
+| CI/CD | [GitHub Actions](https://github.com/features/actions) |
 
 ---
 
@@ -148,11 +120,14 @@ Windows SmartScreen はインストーラーまたは実行ファイルをブロ
 
 ```
 codeanywhere/
-├── electron/                # Electron メインプロセス＆プリロード
-│   ├── main.ts              # ウィンドウ作成、組み込みサーバーライフサイクル
-│   └── preload.ts           # コンテキスト ブリッジ
+├── .github/workflows/      # CI/CD：Web ビルド + Docker
+├── public/
+│   ├── manifest.json        # PWA Web App Manifest
+│   ├── sw.js                # Service Worker
+│   └── icons/               # PWA アイコン
 ├── src/
 │   ├── app/                 # Next.js App Router ページ＆ API ルート
+│   │   ├── login/           # トークン認証ログインページ
 │   │   ├── chat/            # 新規チャットページ＆ [id] セッションページ
 │   │   ├── extensions/      # スキル＋ MCP サーバー管理
 │   │   ├── settings/        # 設定エディター
@@ -166,20 +141,24 @@ codeanywhere/
 │   ├── components/
 │   │   ├── ai-elements/     # メッセージバブル、コードブロック、ツール呼び出しなど
 │   │   ├── chat/            # ChatView、MessageList、MessageInput、ストリーミング
-│   │   ├── layout/          # AppShell、NavRail、Header、RightPanel
+│   │   ├── layout/          # AppShell、NavRail、Header、MobileDrawer、RightPanel
 │   │   ├── plugins/         # MCP サーバーリスト＆エディター
 │   │   ├── project/         # FileTree、FilePreview、TaskList
 │   │   ├── skills/          # SkillsManager、SkillEditor
 │   │   └── ui/              # Radix ベースのプリミティブ（button、dialog、tabs など）
-│   ├── hooks/               # カスタム React フック（usePanel など）
+│   ├── hooks/               # カスタム React フック
 │   ├── lib/                 # コアロジック
+│   │   ├── auth.ts          # トークン検証とクライアントストレージ
+│   │   ├── api-client.ts    # authFetch ラッパー
 │   │   ├── claude-client.ts # Agent SDK ストリーミングラッパー
 │   │   ├── db.ts            # SQLite スキーマ、マイグレーション、CRUD
 │   │   ├── files.ts         # ファイルシステムヘルパー
 │   │   ├── permission-registry.ts  # 権限リクエスト/レスポンスブリッジ
 │   │   └── utils.ts         # 共有ユーティリティ
+│   ├── middleware.ts         # 認証ミドルウェア（ルート保護）
 │   └── types/               # TypeScript インターフェース＆ API コントラクト
-├── electron-builder.yml     # パッケージング設定
+├── Dockerfile
+├── docker-compose.yml
 ├── package.json
 └── tsconfig.json
 ```
@@ -189,28 +168,21 @@ codeanywhere/
 ## 開発
 
 ```bash
-# Next.js 開発サーバーのみを実行（ブラウザで開く）
+# Next.js 開発サーバーを実行
 npm run dev
 
-# 開発モードで完全な Electron アプリを実行
-# (Next.js を起動して待機し、その後 Electron を開く)
-npm run electron:dev
-
-# 本番環境ビルド（Next.js 静的エクスポート）
+# 本番環境ビルド
 npm run build
 
-# Electron 配布可能ファイルと Next.js をビルド
-npm run electron:build
-
-# macOS DMG をパッケージ（ユニバーサルバイナリ）
-npm run electron:pack
+# 本番サーバーを起動
+npm run start
 ```
 
 ### メモ
 
-- Electron メインプロセス（`electron/main.ts`）は Next.js スタンドアロン サーバーをフォークし、`127.0.0.1` 経由でランダムなフリーポートで接続します。
-- チャット データは `~/.codeanywhere/codeanywhere.db`（または開発モードでは `./data/codeanywhere.db`）に保存されます。
+- チャットデータは `~/.codeanywhere/codeanywhere.db` に保存されます。旧バージョンの `~/.codepilot` ディレクトリが存在する場合、初回起動時に自動的に移行されます。
 - アプリは SQLite の WAL モードを使用するため、同時読み込みは高速です。
+- Service Worker は静的アセットをキャッシュし、オフラインでのアクセスを可能にします。API ルートはキャッシュされません。
 
 ---
 
@@ -220,7 +192,7 @@ npm run electron:pack
 
 1. リポジトリをフォークしてフィーチャーブランチを作成します。
 2. `npm install` で依存関係をインストールします。
-3. `npm run electron:dev` を実行して、変更をローカルでテストします。
+3. `npm run dev` を実行して、変更をローカルでテストします。
 4. プルリクエストを開く前に `npm run lint` が成功することを確認します。
 5. 変更内容と理由を明確に説明した PR を `main` に対して開きます。
 

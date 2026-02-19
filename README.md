@@ -1,10 +1,10 @@
 <img src="docs/icon-readme.png" width="32" height="32" alt="CodeAnywhere" style="vertical-align: middle; margin-right: 8px;" /> CodeAnywhere
 ===
 
-**A desktop GUI client for Claude Code** -- chat, code, and manage projects through a polished visual interface instead of the terminal.
+**A web GUI for Claude Code** -- chat, code, and manage projects through a polished visual interface accessible from any browser, including mobile devices.
 
 [![GitHub release](https://img.shields.io/github/v/release/op7418/CodeAnywhere)](https://github.com/op7418/CodeAnywhere/releases)
-[![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey)](https://github.com/op7418/CodeAnywhere/releases)
+[![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Docker%20%7C%20PWA-blue)](https://github.com/op7418/CodeAnywhere/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 [中文文档](./README_CN.md) | [日本語](./README_JA.md)
@@ -25,10 +25,10 @@
 - **Custom skills** -- Define reusable prompt-based skills (global or per-project) that can be invoked as slash commands during chat.
 - **Settings editor** -- Visual and JSON editors for your `~/.claude/settings.json`, including permissions and environment variables.
 - **Token usage tracking** -- See input/output token counts and estimated cost after every assistant response.
-- **Auto update check** -- The app periodically checks for new releases and notifies you when an update is available.
+- **PWA install** -- Install to your home screen on mobile or desktop for a native-like experience.
 - **Dark / Light theme** -- One-click theme toggle in the navigation rail.
 - **Slash commands** -- Built-in commands like `/help`, `/clear`, `/cost`, `/compact`, `/doctor`, `/review`, and more.
-- **Electron packaging** -- Ships as a desktop app with a hidden title bar, bundled Next.js server, graceful shutdown, and automatic port allocation.
+- **Token-based auth** -- Set `AUTH_TOKEN` to protect your instance when exposed over a network.
 
 ---
 
@@ -50,18 +50,6 @@
 
 ---
 
-## Download
-
-Pre-built releases are available on the [**Releases**](https://github.com/op7418/CodeAnywhere/releases) page. Releases are built automatically via GitHub Actions for all platforms.
-
-### Supported Platforms
-
-- **macOS** -- arm64 (Apple Silicon) and x64 (Intel) distributed as `.dmg`
-- **Windows** -- NSIS installer (`.exe`) bundling x64 + arm64
-- **Linux** -- x64 and arm64 distributed as `.AppImage`, `.deb`, and `.rpm`
-
----
-
 ## Quick Start
 
 ```bash
@@ -72,59 +60,42 @@ cd CodeAnywhere
 # Install dependencies
 npm install
 
-# Start in development mode (browser)
+# Start in development mode
 npm run dev
-
-# -- or start the full Electron app in dev mode --
-npm run electron:dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) (browser mode) or wait for the Electron window to appear.
+Then open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Installation Troubleshooting
+## Deploy
 
-CodeAnywhere is not code-signed yet, so your operating system will display a security warning the first time you open it.
-
-### macOS
-
-You will see a dialog that says **"Apple cannot check it for malicious software"**.
-
-**Option 1 -- Right-click to open**
-
-1. Right-click (or Control-click) `CodeAnywhere.app` in Finder.
-2. Select **Open** from the context menu.
-3. Click **Open** in the confirmation dialog.
-
-**Option 2 -- System Settings**
-
-1. Open **System Settings** > **Privacy & Security**.
-2. Scroll down to the **Security** section.
-3. You will see a message about CodeAnywhere being blocked. Click **Open Anyway**.
-4. Authenticate if prompted, then launch the app.
-
-**Option 3 -- Terminal command**
+### Docker (recommended for self-hosting)
 
 ```bash
-xattr -cr /Applications/CodeAnywhere.app
+# Copy and configure environment
+cp .env.example .env
+# Set AUTH_TOKEN in .env to protect your instance
+
+# Start with Docker Compose
+docker compose up -d
 ```
 
-This strips the quarantine attribute so macOS will no longer block the app.
+The app will be available at `http://localhost:3000`.
 
-### Windows
+### Standalone Node.js
 
-Windows SmartScreen will block the installer or executable.
+```bash
+npm run build
+npm run start
+```
 
-**Option 1 -- Run anyway**
+### Environment Variables
 
-1. On the SmartScreen dialog, click **More info**.
-2. Click **Run anyway**.
-
-**Option 2 -- Disable App Install Control**
-
-1. Open **Settings** > **Apps** > **Advanced app settings**.
-2. Toggle **App Install Control** (or "Choose where to get apps") to allow apps from anywhere.
+| Variable | Description | Default |
+|---|---|---|
+| `AUTH_TOKEN` | Bearer token required to access the app. Leave unset to disable auth (local-only use). | unset |
+| `PORT` | HTTP port | `3000` |
 
 ---
 
@@ -132,19 +103,18 @@ Windows SmartScreen will block the installer or executable.
 
 | Layer | Technology |
 |---|---|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router) |
-| Desktop shell | [Electron 40](https://www.electronjs.org/) |
+| Framework | [Next.js 16](https://nextjs.org/) (App Router, standalone) |
+| PWA | Service Worker + Web App Manifest |
 | UI components | [Radix UI](https://www.radix-ui.com/) + [shadcn/ui](https://ui.shadcn.com/) |
 | Styling | [Tailwind CSS 4](https://tailwindcss.com/) |
-| Animation | [Motion](https://motion.dev/) (Framer Motion) |
+| Animation | [Motion](https://motion.dev/) |
 | AI integration | [Claude Agent SDK](https://www.npmjs.com/package/@anthropic-ai/claude-agent-sdk) |
 | Database | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) (embedded, per-user) |
 | Markdown | react-markdown + remark-gfm + rehype-raw + [Shiki](https://shiki.style/) |
-| Streaming | [Vercel AI SDK](https://sdk.vercel.ai/) helpers + Server-Sent Events |
+| Streaming | Server-Sent Events |
 | Icons | [Hugeicons](https://hugeicons.com/) + [Lucide](https://lucide.dev/) |
-| Testing | [Playwright](https://playwright.dev/) |
-| CI/CD | [GitHub Actions](https://github.com/features/actions) (auto-build + release on tag) |
-| Build / Pack | electron-builder + esbuild |
+| Deployment | [Docker](https://www.docker.com/) |
+| CI/CD | [GitHub Actions](https://github.com/features/actions) |
 
 ---
 
@@ -152,12 +122,14 @@ Windows SmartScreen will block the installer or executable.
 
 ```
 codeanywhere/
-├── .github/workflows/      # CI/CD: multi-platform build & auto-release
-├── electron/                # Electron main process & preload
-│   ├── main.ts              # Window creation, embedded server lifecycle
-│   └── preload.ts           # Context bridge
+├── .github/workflows/      # CI/CD: web build + Docker
+├── public/
+│   ├── manifest.json        # PWA Web App Manifest
+│   ├── sw.js                # Service Worker
+│   └── icons/               # PWA icons
 ├── src/
 │   ├── app/                 # Next.js App Router pages & API routes
+│   │   ├── login/           # Token-based login page
 │   │   ├── chat/            # New-chat page & [id] session page
 │   │   ├── extensions/      # Skills + MCP server management
 │   │   ├── settings/        # Settings editor
@@ -171,20 +143,24 @@ codeanywhere/
 │   ├── components/
 │   │   ├── ai-elements/     # Message bubbles, code blocks, tool calls, etc.
 │   │   ├── chat/            # ChatView, MessageList, MessageInput, streaming
-│   │   ├── layout/          # AppShell, NavRail, ResizeHandle, RightPanel
+│   │   ├── layout/          # AppShell, NavRail, Header, MobileDrawer, RightPanel
 │   │   ├── plugins/         # MCP server list & editor
 │   │   ├── project/         # FileTree, FilePreview, TaskList
 │   │   ├── skills/          # SkillsManager, SkillEditor
 │   │   └── ui/              # Radix-based primitives (button, dialog, tabs, ...)
-│   ├── hooks/               # Custom React hooks (usePanel, ...)
+│   ├── hooks/               # Custom React hooks
 │   ├── lib/                 # Core logic
+│   │   ├── auth.ts          # Token verification and client storage
+│   │   ├── api-client.ts    # authFetch wrapper
 │   │   ├── claude-client.ts # Agent SDK streaming wrapper
 │   │   ├── db.ts            # SQLite schema, migrations, CRUD
 │   │   ├── files.ts         # File system helpers
 │   │   ├── permission-registry.ts  # Permission request/response bridge
 │   │   └── utils.ts         # Shared utilities
+│   ├── middleware.ts         # Auth middleware (route protection)
 │   └── types/               # TypeScript interfaces & API contracts
-├── electron-builder.yml     # Packaging configuration
+├── Dockerfile
+├── docker-compose.yml
 ├── package.json
 └── tsconfig.json
 ```
@@ -194,42 +170,21 @@ codeanywhere/
 ## Development
 
 ```bash
-# Run Next.js dev server only (opens in browser)
+# Run Next.js dev server
 npm run dev
 
-# Run the full Electron app in dev mode
-# (starts Next.js + waits for it, then opens Electron)
-npm run electron:dev
-
-# Production build (Next.js static export)
+# Production build
 npm run build
 
-# Build Electron distributable + Next.js
-npm run electron:build
-
-# Package for specific platforms
-npm run electron:pack:mac     # macOS DMG (arm64 + x64)
-npm run electron:pack:win     # Windows NSIS installer
-npm run electron:pack:linux   # Linux AppImage, deb, rpm
+# Start production server
+npm run start
 ```
-
-### CI/CD
-
-The project uses GitHub Actions for automated builds. Pushing a `v*` tag triggers a full multi-platform build and automatically creates a GitHub Release with all artifacts:
-
-```bash
-git tag v0.8.1
-git push origin v0.8.1
-# CI builds Windows + macOS + Linux, then publishes the release
-```
-
-You can also manually trigger builds for individual platforms from the Actions tab.
 
 ### Notes
 
-- The Electron main process (`electron/main.ts`) forks the Next.js standalone server and connects to it over `127.0.0.1` with a random free port.
-- Chat data is stored in `~/.codeanywhere/codeanywhere.db` (or `./data/codeanywhere.db` in dev mode).
+- Chat data is stored in `~/.codeanywhere/codeanywhere.db`. If a previous `~/.codepilot` directory exists, it is automatically migrated on first launch.
 - The app uses WAL mode for SQLite, so concurrent reads are fast.
+- The Service Worker caches static assets and shells the app for offline use. API routes are never cached.
 
 ---
 
@@ -239,7 +194,7 @@ Contributions are welcome. To get started:
 
 1. Fork the repository and create a feature branch.
 2. Install dependencies with `npm install`.
-3. Run `npm run electron:dev` to test your changes locally.
+3. Run `npm run dev` to test your changes locally.
 4. Make sure `npm run lint` passes before opening a pull request.
 5. Open a PR against `main` with a clear description of what changed and why.
 
