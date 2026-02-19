@@ -10,15 +10,27 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { usePWAInstall } from "@/hooks/usePWAInstall";
 
 export function Header() {
   const { theme, setTheme } = useTheme();
   const emptySubscribe = useCallback(() => () => {}, []);
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const { canInstall, install } = usePWAInstall();
 
   return (
     <header className="flex h-11 shrink-0 items-center gap-2 border-b border-border/50 bg-background px-4">
       <div className="ml-auto flex items-center gap-2">
+        {canInstall && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={install}
+            className="h-7 text-xs px-2"
+          >
+            Install
+          </Button>
+        )}
         {mounted && (
           <Tooltip>
             <TooltipTrigger asChild>
