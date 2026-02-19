@@ -12,7 +12,11 @@ import {
 } from "@/components/ui/tooltip";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
 
-export function Header() {
+interface HeaderProps {
+  onOpenDrawer?: () => void;
+}
+
+export function Header({ onOpenDrawer }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const emptySubscribe = useCallback(() => () => {}, []);
   const mounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
@@ -20,6 +24,17 @@ export function Header() {
 
   return (
     <header className="flex h-11 shrink-0 items-center gap-2 border-b border-border/50 bg-background px-4">
+      {onOpenDrawer && (
+        <button
+          onClick={onOpenDrawer}
+          className="mr-2 p-2 rounded-md hover:bg-accent md:hidden"
+          aria-label="Open menu"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M3 5h14M3 10h14M3 15h14" />
+          </svg>
+        </button>
+      )}
       <div className="ml-auto flex items-center gap-2">
         {canInstall && (
           <Button
