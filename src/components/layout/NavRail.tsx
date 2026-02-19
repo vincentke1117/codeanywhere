@@ -24,7 +24,6 @@ import { cn } from "@/lib/utils";
 interface NavRailProps {
   chatListOpen: boolean;
   onToggleChatList: () => void;
-  hasUpdate?: boolean;
   skipPermissionsActive?: boolean;
 }
 
@@ -34,7 +33,7 @@ const navItems = [
   { href: "/settings", label: "Settings", icon: Settings02Icon },
 ] as const;
 
-export function NavRail({ onToggleChatList, hasUpdate, skipPermissionsActive }: NavRailProps) {
+export function NavRail({ onToggleChatList, skipPermissionsActive }: NavRailProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
@@ -94,9 +93,6 @@ export function NavRail({ onToggleChatList, hasUpdate, skipPermissionsActive }: 
                         <span className="sr-only">{item.label}</span>
                       </Link>
                     </Button>
-                    {item.href === "/settings" && hasUpdate && (
-                      <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-blue-500" />
-                    )}
                   </div>
                 )}
               </TooltipTrigger>
