@@ -29,6 +29,7 @@
 - **深色/浅色主题** -- 导航栏一键切换主题
 - **斜杠命令** -- 内置 `/help`、`/clear`、`/cost`、`/compact`、`/doctor`、`/review` 等命令
 - **Token 鉴权** -- 设置 `AUTH_TOKEN` 环境变量，在网络暴露时保护你的实例
+- **安全防护头** -- 自动设置 CSP、X-Frame-Options、速率限制等安全 HTTP 头
 
 ---
 
@@ -83,6 +84,28 @@ docker compose up -d
 
 应用将在 `http://localhost:3000` 上运行。
 
+### 远程访问（Cloudflare Tunnel）
+
+从外部网络访问本地运行的 CodeAnywhere：
+
+1. 注册 [Cloudflare](https://dash.cloudflare.com/) 账号并添加域名。
+2. 进入 [Zero Trust](https://one.dash.cloudflare.com/) → Networks → Tunnels → 创建隧道。
+3. 复制 Tunnel Token，并将公共主机名指向 `http://nginx:80`。
+4. 配置 `.env`：
+
+```bash
+cp .env.example .env
+# 填写 ANTHROPIC_API_KEY、AUTH_TOKEN、CLOUDFLARE_TUNNEL_TOKEN
+```
+
+5. 使用隧道模式启动：
+
+```bash
+docker compose -f docker-compose.tunnel.yml up -d
+```
+
+你的实例将通过配置的 Cloudflare 域名提供服务，自动启用 HTTPS。
+
 ### 独立 Node.js 运行
 
 ```bash
@@ -96,6 +119,7 @@ npm run start
 |------|------|--------|
 | `AUTH_TOKEN` | 访问应用所需的 Bearer Token。不设置则禁用鉴权（仅本地使用）。 | 未设置 |
 | `PORT` | HTTP 端口 | `3000` |
+| `CLOUDFLARE_TUNNEL_TOKEN` | Cloudflare Tunnel 令牌（仅用于 `docker-compose.tunnel.yml`）。 | 未设置 |
 
 ---
 

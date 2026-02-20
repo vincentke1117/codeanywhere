@@ -29,6 +29,7 @@
 - **Dark / Light theme** -- One-click theme toggle in the navigation rail.
 - **Slash commands** -- Built-in commands like `/help`, `/clear`, `/cost`, `/compact`, `/doctor`, `/review`, and more.
 - **Token-based auth** -- Set `AUTH_TOKEN` to protect your instance when exposed over a network.
+- **Security headers** -- CSP, X-Frame-Options, rate limiting, and other security headers are set automatically.
 
 ---
 
@@ -83,6 +84,28 @@ docker compose up -d
 
 The app will be available at `http://localhost:3000`.
 
+### Remote Access (Cloudflare Tunnel)
+
+To access CodeAnywhere from outside your local network:
+
+1. Create a [Cloudflare](https://dash.cloudflare.com/) account and add a domain.
+2. Go to [Zero Trust](https://one.dash.cloudflare.com/) → Networks → Tunnels → Create a tunnel.
+3. Copy the Tunnel Token and set the public hostname to point to `http://nginx:80`.
+4. Configure your `.env`:
+
+```bash
+cp .env.example .env
+# Fill in ANTHROPIC_API_KEY, AUTH_TOKEN, CLOUDFLARE_TUNNEL_TOKEN
+```
+
+5. Start with the tunnel compose file:
+
+```bash
+docker compose -f docker-compose.tunnel.yml up -d
+```
+
+Your instance will be available at your configured Cloudflare domain with automatic HTTPS.
+
 ### Standalone Node.js
 
 ```bash
@@ -96,6 +119,7 @@ npm run start
 |---|---|---|
 | `AUTH_TOKEN` | Bearer token required to access the app. Leave unset to disable auth (local-only use). | unset |
 | `PORT` | HTTP port | `3000` |
+| `CLOUDFLARE_TUNNEL_TOKEN` | Cloudflare Tunnel token (only for `docker-compose.tunnel.yml`). | unset |
 
 ---
 

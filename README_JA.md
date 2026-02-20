@@ -27,6 +27,7 @@
 - **ダーク / ライト テーマ** -- ナビゲーションレールのワンクリックでテーマを切り替えられます。
 - **スラッシュコマンド** -- `/help`、`/clear`、`/cost`、`/compact`、`/doctor`、`/review` などの組み込みコマンドを使用できます。
 - **トークン認証** -- `AUTH_TOKEN` を設定して、ネットワーク公開時にインスタンスを保護できます。
+- **セキュリティヘッダー** -- CSP、X-Frame-Options、レート制限などのセキュリティ HTTP ヘッダーが自動的に設定されます。
 
 ---
 
@@ -81,6 +82,28 @@ docker compose up -d
 
 アプリは `http://localhost:3000` で利用できます。
 
+### リモートアクセス（Cloudflare Tunnel）
+
+ローカルネットワーク外から CodeAnywhere にアクセスするには：
+
+1. [Cloudflare](https://dash.cloudflare.com/) アカウントを作成し、ドメインを追加します。
+2. [Zero Trust](https://one.dash.cloudflare.com/) → Networks → Tunnels → トンネルを作成します。
+3. Tunnel Token をコピーし、パブリックホスト名を `http://nginx:80` に設定します。
+4. `.env` を設定します：
+
+```bash
+cp .env.example .env
+# ANTHROPIC_API_KEY、AUTH_TOKEN、CLOUDFLARE_TUNNEL_TOKEN を入力
+```
+
+5. トンネルモードで起動します：
+
+```bash
+docker compose -f docker-compose.tunnel.yml up -d
+```
+
+設定した Cloudflare ドメインで HTTPS が自動的に有効になり、インスタンスにアクセスできます。
+
 ### スタンドアロン Node.js
 
 ```bash
@@ -94,6 +117,7 @@ npm run start
 |---|---|---|
 | `AUTH_TOKEN` | アプリへのアクセスに必要な Bearer トークン。未設定の場合は認証を無効化（ローカル専用）。 | 未設定 |
 | `PORT` | HTTP ポート | `3000` |
+| `CLOUDFLARE_TUNNEL_TOKEN` | Cloudflare Tunnel トークン（`docker-compose.tunnel.yml` のみで使用）。 | 未設定 |
 
 ---
 
