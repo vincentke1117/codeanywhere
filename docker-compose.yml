@@ -1,0 +1,18 @@
+services:
+  codeanywhere:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - codeanywhere-data:/root/.codeanywhere
+      - claude-config:/root/.claude
+      # Mount your project directories for Claude Code to access:
+      # - /path/to/your/projects:/workspace
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - AUTH_TOKEN=${AUTH_TOKEN}
+    restart: unless-stopped
+
+volumes:
+  codeanywhere-data:
+  claude-config:
