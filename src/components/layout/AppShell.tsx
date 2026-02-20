@@ -8,6 +8,8 @@ import { ChatListPanel } from "./ChatListPanel";
 import { RightPanel } from "./RightPanel";
 import { ResizeHandle } from "./ResizeHandle";
 import { DocPreview } from "./DocPreview";
+import { Header } from "./Header";
+import { MobileDrawer } from "./MobileDrawer";
 import { PanelContext, type PanelContent, type PreviewViewMode } from "@/hooks/usePanel";
 import { authFetch } from "@/lib/api-client";
 
@@ -28,11 +30,16 @@ function defaultViewMode(filePath: string): PreviewViewMode {
 }
 
 const LG_BREAKPOINT = 1024;
+const MD_BREAKPOINT = 768;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   const [chatListOpen, setChatListOpenRaw] = useState(false);
+
+  // Mobile responsive state
+  const [isMobile, setIsMobile] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Panel width state with localStorage persistence
   const [chatListWidth, setChatListWidth] = useState(() => {
@@ -78,6 +85,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       setChatListOpenRaw(false);
     }
   }, [isChatRoute]);
+  // Mobile breakpoint detection
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MD_BREAKPOINT - 1}px)`);
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => {
+      setIsMobile(e.matches);
+      if (!e.matches) setDrawerOpen(false);
+    };
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
   const [panelOpen, setPanelOpenRaw] = useState(false);
   const [panelContent, setPanelContent] = useState<PanelContent>("files");
   const [workingDirectory, setWorkingDirectory] = useState("");
@@ -191,22 +209,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <PanelContext.Provider value={panelContextValue}>
       <TooltipProvider delayDuration={300}>
         <div className="flex h-screen overflow-hidden">
-          <NavRail
-            chatListOpen={chatListOpen}
-            onToggleChatList={() => setChatListOpen(!chatListOpen)}
-            skipPermissionsActive={skipPermissionsActive}
-          />
-          <ChatListPanel open={chatListOpen} width={chatListWidth} />
-          {chatListOpen && (
-            <ResizeHandle side="left" onResize={handleChatListResize} onResizeEnd={handleChatListResizeEnd} />
+          {isMobile ? (
+            <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} side="left">
+              <div className="flex h-full">
+                <NavRail
+                  chatListOpen={chatListOpen}
+                  onToggleChatList={() => setChatListOpen(!chatListOpen)}
+                  skipPermissionsActive={skipPermissionsActive}
+                />
+                <ChatListPanel open={chatListOpen} width={chatListWidth} />
+              </div>
+            </MobileDrawer>
+          ) : (
+            <>
+              <NavRail
+                chatListOpen={chatListOpen}
+                onToggleChatList={() => setChatListOpen(!chatListOpen)}
+                skipPermissionsActive={skipPermissionsActive}
+              />
+              <ChatListPanel open={chatListOpen} width={chatListWidth} />
+              {chatListOpen && (
+                <ResizeHandle side="left" onResize={handleChatListResize} onResizeEnd={handleChatListResizeEnd} />
+              )}
+            </>
           )}
           <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+            <Header onOpenDrawer={isMobile ? () => setDrawerOpen(true) : undefined} />
             <main className="relative flex-1 overflow-hidden">{children}</main>
           </div>
-          {isChatDetailRoute && previewFile && (
+          {!isMobile && isChatDetailRoute && previewFile && (
             <ResizeHandle side="right" onResize={handleDocPreviewResize} onResizeEnd={handleDocPreviewResizeEnd} />
           )}
-          {isChatDetailRoute && previewFile && (
+          {!isMobile && isChatDetailRoute && previewFile && (
             <DocPreview
               filePath={previewFile}
               viewMode={previewViewMode}
@@ -215,10 +249,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               width={docPreviewWidth}
             />
           )}
-          {isChatDetailRoute && panelOpen && (
+          {!isMobile && isChatDetailRoute && panelOpen && (
             <ResizeHandle side="right" onResize={handleRightPanelResize} onResizeEnd={handleRightPanelResizeEnd} />
           )}
-          {isChatDetailRoute && <RightPanel width={rightPanelWidth} />}
+          {!isMobile && isChatDetailRoute && <RightPanel width={rightPanelWidth} />}
+          {isMobile && isChatDetailRoute && (
+            <MobileDrawer open={panelOpen} onClose={() => setPanelOpen(false)} side="bottom">
+              <div className="h-[70vh] overflow-auto">
+                <RightPanel />
+              </div>
+            </MobileDrawer>
+          )}
         </div>
       </TooltipProvider>
     </PanelContext.Provider>
