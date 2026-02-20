@@ -121,7 +121,7 @@ export function CodeBlock({
   const theme = isTerminal ? vscDarkPlus : oneDark;
 
   return (
-    <div className="relative group not-prose my-3 rounded-lg overflow-hidden border border-zinc-700/50">
+    <div className="relative group not-prose my-3 rounded-lg overflow-hidden border border-zinc-700/50 max-w-[calc(100vw-2rem)]">
       {/* Header bar */}
       <div className={cn(
         "flex items-center justify-between px-4 py-1.5 text-xs",
@@ -184,7 +184,7 @@ export function CodeBlock({
       {/* Code area */}
       <div
         ref={codeContainerRef}
-        className="relative transition-[max-height] duration-300 ease-in-out overflow-hidden"
+        className="relative transition-[max-height] duration-300 ease-in-out overflow-y-hidden overflow-x-auto"
         style={{
           maxHeight: animatingHeight ?? (!isCollapsible || expanded ? undefined : `${maxCollapsedLines * 1.5 + 1.5}rem`),
         }}
