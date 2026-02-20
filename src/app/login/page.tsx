@@ -26,7 +26,8 @@ function LoginForm() {
       if (res.ok) {
         setStoredToken(token);
         const redirect = searchParams.get("redirect") || "/";
-        router.push(redirect);
+        const safeRedirect = redirect.startsWith("/") && !redirect.startsWith("//") ? redirect : "/";
+        router.push(safeRedirect);
       } else {
         setError("Invalid token");
       }
