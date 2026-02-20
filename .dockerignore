@@ -1,0 +1,12 @@
+node_modules
+.next
+release
+dist-electron
+.git
+*.md
+docs
+src/__tests__
+playwright-report
+test-results
+.env*
+!.env.example
