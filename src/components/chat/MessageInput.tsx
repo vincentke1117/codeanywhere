@@ -221,7 +221,7 @@ function FileAwareSubmitButton({
       status={status}
       onStop={onStop}
       disabled={disabled || (!isStreaming && !inputValue.trim() && !hasBadge && !hasFiles)}
-      className="rounded-full"
+      className="rounded-full min-h-[44px] min-w-[44px]"
     >
       {isStreaming ? (
         <SquareIcon className="size-4" />
@@ -742,7 +742,7 @@ export function MessageInput({
   const chatStatus: ChatStatus = isStreaming ? 'streaming' : 'ready';
 
   return (
-    <div className="bg-background/80 backdrop-blur-lg px-4 py-3">
+    <div className="bg-background/80 backdrop-blur-lg px-4 py-3 pb-[max(0.75rem,var(--safe-area-bottom))]">
       <div className="mx-auto">
         <div className="relative">
           {/* Popover */}
@@ -906,7 +906,7 @@ export function MessageInput({
               onChange={(e) => handleInputChange(e.currentTarget.value)}
               onKeyDown={handleKeyDown}
               disabled={disabled}
-              className="min-h-10"
+              className="min-h-10 text-base md:text-sm"
             />
             <PromptInputFooter>
               <PromptInputTools>
