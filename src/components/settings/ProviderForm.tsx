@@ -40,6 +40,16 @@ const PROVIDER_TYPES = [
   { value: "custom", label: "Custom" },
 ];
 
+function extractModelFromExtraEnv(envStr: string): string {
+  try {
+    const parsed = JSON.parse(envStr || "{}");
+    const model = parsed?.ANTHROPIC_MODEL;
+    return typeof model === "string" ? model : "";
+  } catch {
+    return "";
+  }
+}
+
 interface ProviderFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -71,6 +81,7 @@ export function ProviderForm({
   const [baseUrl, setBaseUrl] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [extraEnv, setExtraEnv] = useState("{}");
+  const [modelName, setModelName] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,7 +98,9 @@ export function ProviderForm({
       setProviderType(provider.provider_type);
       setBaseUrl(provider.base_url);
       setApiKey("");
-      setExtraEnv(provider.extra_env || "{}");
+      const envStr = provider.extra_env || "{}";
+      setExtraEnv(envStr);
+      setModelName(extractModelFromExtraEnv(envStr));
       setNotes(provider.notes || "");
       // Show advanced if extra_env has content
       try {
@@ -104,6 +117,7 @@ export function ProviderForm({
       // Use extra_env from preset if provided, otherwise look up by type
       const envStr = initialPreset.extra_env || PROVIDER_PRESETS[initialPreset.provider_type]?.extra_env || "{}";
       setExtraEnv(envStr);
+      setModelName(extractModelFromExtraEnv(envStr));
       setNotes("");
       try {
         const parsed = JSON.parse(envStr);
@@ -117,6 +131,7 @@ export function ProviderForm({
       setBaseUrl(PROVIDER_PRESETS.anthropic.base_url);
       setApiKey("");
       setExtraEnv("{}");
+      setModelName("");
       setNotes("");
       setShowAdvanced(false);
     }
@@ -128,6 +143,7 @@ export function ProviderForm({
     if (preset) {
       setBaseUrl(preset.base_url);
       setExtraEnv(preset.extra_env);
+      setModelName(extractModelFromExtraEnv(preset.extra_env));
       try {
         const parsed = JSON.parse(preset.extra_env);
         setShowAdvanced(Object.keys(parsed).length > 0);
@@ -137,6 +153,7 @@ export function ProviderForm({
     }
   };
 
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) {
@@ -144,12 +161,23 @@ export function ProviderForm({
       return;
     }
 
-    // Validate extra_env JSON
+    // Validate extra_env JSON and merge model field
+    let parsedExtraEnv: Record<string, unknown>;
     try {
-      JSON.parse(extraEnv);
+      parsedExtraEnv = JSON.parse(extraEnv);
+      if (typeof parsedExtraEnv !== "object" || parsedExtraEnv === null || Array.isArray(parsedExtraEnv)) {
+        throw new Error();
+      }
     } catch {
-      setError("Extra environment variables must be valid JSON");
+      setError("Extra environment variables must be valid JSON object");
       return;
+    }
+
+    const trimmedModel = modelName.trim();
+    if (trimmedModel) {
+      parsedExtraEnv.ANTHROPIC_MODEL = trimmedModel;
+    } else {
+      delete parsedExtraEnv.ANTHROPIC_MODEL;
     }
 
     setSaving(true);
@@ -160,7 +188,7 @@ export function ProviderForm({
         provider_type: providerType,
         base_url: baseUrl.trim(),
         api_key: apiKey,
-        extra_env: extraEnv,
+        extra_env: JSON.stringify(parsedExtraEnv),
         notes: notes.trim(),
       });
       onOpenChange(false);
@@ -244,6 +272,23 @@ export function ProviderForm({
               onChange={(e) => setApiKey(e.target.value)}
               className="font-mono text-sm"
             />
+          </div>
+
+
+          <div className="space-y-2">
+            <Label htmlFor="provider-model" className="text-xs text-muted-foreground">
+              Model (optional)
+            </Label>
+            <Input
+              id="provider-model"
+              placeholder="e.g. claude-sonnet-4-5"
+              value={modelName}
+              onChange={(e) => setModelName(e.target.value)}
+              className="font-mono text-sm"
+            />
+            <p className="text-[11px] text-muted-foreground">
+              Saved as <code>ANTHROPIC_MODEL</code> in extra environment variables.
+            </p>
           </div>
 
           {/* Advanced options toggle */}
