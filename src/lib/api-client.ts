@@ -1,5 +1,5 @@
 // src/lib/api-client.ts
-import { getStoredToken } from "@/lib/auth";
+import { getStoredToken, clearStoredToken } from "@/lib/auth";
 
 /**
  * Authenticated fetch wrapper. Automatically adds Authorization header
@@ -20,6 +20,7 @@ export async function authFetch(
 
   // If 401, redirect to login
   if (response.status === 401 && typeof window !== "undefined") {
+    clearStoredToken();
     const currentPath = window.location.pathname;
     if (currentPath !== "/login") {
       window.location.href = `/login?redirect=${encodeURIComponent(currentPath)}`;

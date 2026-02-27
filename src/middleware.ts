@@ -22,6 +22,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/_next/") ||
     pathname.startsWith("/icons/") ||
     pathname === "/manifest.json" ||
+    pathname === "/sw.js" ||
     pathname === "/favicon.ico"
   ) {
     return NextResponse.next();
@@ -52,13 +53,17 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  // Check Authorization header
+  // Check Authorization header first, then auth cookie fallback for browser page navigations
   const authorization = request.headers.get("Authorization");
+  const cookieToken = request.cookies.get("codeanywhere_auth_token")?.value;
   if (authorization) {
     const [scheme, token] = authorization.split(" ");
     if (scheme === "Bearer" && token === authToken) {
       return NextResponse.next();
     }
+  }
+  if (cookieToken && cookieToken === authToken) {
+    return NextResponse.next();
   }
 
   // For API routes, return 401

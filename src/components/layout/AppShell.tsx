@@ -20,6 +20,17 @@ const RIGHTPANEL_MAX = 480;
 const DOCPREVIEW_MIN = 320;
 const DOCPREVIEW_MAX = 800;
 
+function readStoredNumber(key: string, fallback: number, min: number, max: number): number {
+  if (typeof window === "undefined") return fallback;
+  const raw = localStorage.getItem(key);
+  if (!raw) return fallback;
+
+  const parsed = Number.parseInt(raw, 10);
+  if (!Number.isFinite(parsed)) return fallback;
+
+  return Math.min(max, Math.max(min, parsed));
+}
+
 /** Extensions that default to "rendered" view mode */
 const RENDERED_EXTENSIONS = new Set([".md", ".mdx", ".html", ".htm"]);
 
@@ -43,12 +54,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   // Panel width state with localStorage persistence
   const [chatListWidth, setChatListWidth] = useState(() => {
-    if (typeof window === "undefined") return 240;
-    return parseInt(localStorage.getItem("codeanywhere_chatlist_width") || "240");
+    return readStoredNumber("codeanywhere_chatlist_width", 240, CHATLIST_MIN, CHATLIST_MAX);
   });
   const [rightPanelWidth, setRightPanelWidth] = useState(() => {
-    if (typeof window === "undefined") return 288;
-    return parseInt(localStorage.getItem("codeanywhere_rightpanel_width") || "288");
+    return readStoredNumber("codeanywhere_rightpanel_width", 288, RIGHTPANEL_MIN, RIGHTPANEL_MAX);
   });
 
   const handleChatListResize = useCallback((delta: number) => {
@@ -108,8 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [previewFile, setPreviewFileRaw] = useState<string | null>(null);
   const [previewViewMode, setPreviewViewMode] = useState<PreviewViewMode>("source");
   const [docPreviewWidth, setDocPreviewWidth] = useState(() => {
-    if (typeof window === "undefined") return 480;
-    return parseInt(localStorage.getItem("codeanywhere_docpreview_width") || "480");
+    return readStoredNumber("codeanywhere_docpreview_width", 480, DOCPREVIEW_MIN, DOCPREVIEW_MAX);
   });
 
   const setPreviewFile = useCallback((path: string | null) => {

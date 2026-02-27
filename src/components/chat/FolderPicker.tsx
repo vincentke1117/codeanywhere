@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { authFetch } from '@/lib/api-client';
 
 interface FolderEntry {
   name: string;
@@ -46,24 +47,29 @@ export function FolderPicker({ open, onOpenChange, onSelect, initialPath }: Fold
   const [loading, setLoading] = useState(false);
   const [pathInput, setPathInput] = useState('');
   const [drives, setDrives] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const browse = useCallback(async (dir?: string) => {
     setLoading(true);
+    setError(null);
     try {
       const url = dir
         ? `/api/files/browse?dir=${encodeURIComponent(dir)}`
         : '/api/files/browse';
-      const res = await fetch(url);
-      if (res.ok) {
-        const data: BrowseResponse = await res.json();
-        setCurrentDir(data.current);
-        setParentDir(data.parent);
-        setDirectories(data.directories);
-        setPathInput(data.current);
-        setDrives(data.drives || []);
+      const res = await authFetch(url);
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Failed to browse directory");
+        return;
       }
+      const data: BrowseResponse = await res.json();
+      setCurrentDir(data.current);
+      setParentDir(data.parent);
+      setDirectories(data.directories);
+      setPathInput(data.current);
+      setDrives(data.drives || []);
     } catch {
-      // silently fail
+      setError("Failed to browse directory");
     } finally {
       setLoading(false);
     }
@@ -160,7 +166,11 @@ export function FolderPicker({ open, onOpenChange, onSelect, initialPath }: Fold
 
           {/* Folder list */}
           <ScrollArea className="h-64">
-            {loading ? (
+            {error ? (
+              <div className="flex items-center justify-center py-8 text-sm text-destructive">
+                {error}
+              </div>
+            ) : loading ? (
               <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
                 Loading...
               </div>
@@ -172,6 +182,7 @@ export function FolderPicker({ open, onOpenChange, onSelect, initialPath }: Fold
               <div className="p-1">
                 {directories.map((dir) => (
                   <button
+                    type="button"
                     key={dir.path}
                     className="flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm hover:bg-accent transition-colors text-left"
                     onClick={() => handleNavigate(dir.path)}

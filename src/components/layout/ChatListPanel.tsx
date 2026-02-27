@@ -255,6 +255,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
       });
       if (res.ok) {
         const data = await res.json();
+        localStorage.setItem("codeanywhere:last-working-directory", workingDirectory);
         window.dispatchEvent(new CustomEvent("session-created"));
         router.push(`/chat/${data.session.id}`);
       }
@@ -272,6 +273,7 @@ export function ChatListPanel({ open, width }: ChatListPanelProps) {
       });
       if (res.ok) {
         const data = await res.json();
+        localStorage.setItem("codeanywhere:last-working-directory", path);
         window.dispatchEvent(new CustomEvent("session-created"));
         router.push(`/chat/${data.session.id}`);
       }

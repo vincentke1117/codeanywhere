@@ -32,6 +32,7 @@ export function getStoredToken(): string | null {
  */
 export function setStoredToken(token: string): void {
   localStorage.setItem("codeanywhere_auth_token", token);
+  document.cookie = `codeanywhere_auth_token=${encodeURIComponent(token)}; Path=/; Max-Age=${60 * 60 * 24 * 30}; SameSite=Lax`;
 }
 
 /**
@@ -39,6 +40,7 @@ export function setStoredToken(token: string): void {
  */
 export function clearStoredToken(): void {
   localStorage.removeItem("codeanywhere_auth_token");
+  document.cookie = "codeanywhere_auth_token=; Path=/; Max-Age=0; SameSite=Lax";
 }
 
 /**
